@@ -14,7 +14,7 @@ const pfi = await DevTools.createDid()
 
 
 // we can require that we see a VC from this trusted issuer
-const vcRequirements = {
+const requiredClaims = {
     id                : '7ce4004c-3c38-4853-968b-e411bafcd945',
     input_descriptors : [{
       id          : 'bbdb9b7c-5754-4f46-b63b-590bada959e0',
@@ -95,7 +95,7 @@ const vcRequirements = {
           additionalProperties : false
         }
       }],
-      vcRequirements: vcRequirements
+      requiredClaims: requiredClaims
     }
 
 var offering = Offering.create({
@@ -131,6 +131,8 @@ const { credential, signedCredential } = await DevTools.createCredential({
     }
   })
 
+  console.log(credential)
+
 
 
   const rfqData = {
@@ -151,7 +153,7 @@ const { credential, signedCredential } = await DevTools.createCredential({
       }
     },
     quoteAmountSubunits : '20000',
-    vcs                 : [signedCredential]
+    claims                 : [signedCredential]
   }
 
   var rfq= Rfq.create({
@@ -162,3 +164,5 @@ const { credential, signedCredential } = await DevTools.createCredential({
 
 
   rfq.verifyClaims(offering);
+  console.log("claims are satisfied");
+
