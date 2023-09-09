@@ -1,4 +1,4 @@
-import { Message, OrderStatus, Rfq, PfiRestClient, DevTools, Offering } from "@tbd54566975/tbdex"
+import { Message, OrderStatus, Rfq, PfiRestClient, DevTools, Offering, Quote } from "@tbd54566975/tbdex"
 import { sign } from "crypto"
 
 
@@ -163,6 +163,35 @@ const { credential, signedCredential } = await DevTools.createCredential({
 
 
 
-  rfq.verifyClaims(offering);
-  console.log("claims are satisfied");
+rfq.verifyClaims(offering);
+console.log("claims are satisfied");
+
+
+const quoteData = {
+  offeringId  : 'abcd123',
+  payinMethod : {
+    kind           : 'DEBIT_CARD',
+    paymentDetails : {
+      'cardNumber'     : '1234567890123456',
+      'expiryDate'     : '12/22',
+      'cardHolderName' : 'Ephraim Bartholomew Winthrop',
+      'cvv'            : '123'
+    }
+  },
+  payoutMethod: {
+    kind           : 'BTC_ADDRESS',
+    paymentDetails : {
+      btcAddress: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'
+    }
+  },
+  quoteAmountSubunits : '20000',
+  claims              : [signedCredential]
+}
+
+const quote = Quote.create({
+  metadata : { from: pfi.did, to: putin.did },
+  data     : quoteData
+})
+
+console.log("quote created");
 
